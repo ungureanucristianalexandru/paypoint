@@ -1,0 +1,232 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ticket List{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1>Ticket Management</h1>
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createTicketModal">
+            Creează Ticket Nou
+        </button>
+        <div class="row flex-row">
+            <div class="container-category">
+                <h5 class="title-category">To Do</h5>
+                <div id="open" class="ticket-column" data-status="Open">
+                    {% for ticket in tickets %}
+                        {% if ticket.status == 'Open' %}
+                            <div class="ticket-card"
+                                 data-id="{{ ticket.id }}"
+                                 data-title="{{ ticket.title }}"
+                                 data-description="{{ ticket.description }}"
+                                 data-status="{{ ticket.status }}"
+                                 data-user="{{ ticket.user.id }}"
+                                 data-bs-toggle="modal"
+                                 data-bs-target="#editTicketModal">
+                                <h5>{{ ticket.title }}</h5>
+                                <p class="user-card mb-0"><i
+                                            class="fas fa-user"></i> {{ ticket.user.firstName }} {{ ticket.user.surname }}
+                                </p>
+                                <form action="{{ path('ticket_delete', {'id': ticket.id}) }}" method="POST"
+                                      id="deleteTicketForm">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ticket.id) }}">
+                                    <button type="submit" class="btn" id="deleteTicketBtn"><i
+                                                class="fa-solid fa-trash"></i></button>
+                                </form>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="container-category">
+                <h5 class="title-category">In Progress</h5>
+                <div id="inProgress" class="ticket-column" data-status="In Progress">
+                    {% for ticket in tickets %}
+                        {% if ticket.status == 'In Progress' %}
+                            <div class="ticket-card"
+                                 data-id="{{ ticket.id }}"
+                                 data-title="{{ ticket.title }}"
+                                 data-description="{{ ticket.description }}"
+                                 data-status="{{ ticket.status }}"
+                                 data-user="{{ ticket.user.id }}"
+                                 data-bs-toggle="modal"
+                                 data-bs-target="#editTicketModal">
+                                <h5>{{ ticket.title }}</h5>
+                                <p class="user-card mb-0"><i
+                                            class="fas fa-user"></i> {{ ticket.user.firstName }} {{ ticket.user.surname }}
+                                </p>
+                                <form action="{{ path('ticket_delete', {'id': ticket.id}) }}" method="POST"
+                                      id="deleteTicketForm">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ticket.id) }}">
+                                    <button type="submit" class="btn" id="deleteTicketBtn"><i
+                                                class="fa-solid fa-trash"></i></button>
+                                </form>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="container-category">
+                <h5 class="title-category">Done</h5>
+                <div id="done" class="ticket-column" data-status="Done">
+                    {% for ticket in tickets %}
+                        {% if ticket.status == 'Done' %}
+                            <div class="ticket-card"
+                                 data-id="{{ ticket.id }}"
+                                 data-title="{{ ticket.title }}"
+                                 data-description="{{ ticket.description }}"
+                                 data-status="{{ ticket.status }}"
+                                 data-user="{{ ticket.user.id }}"
+                                 data-bs-toggle="modal"
+                                 data-bs-target="#editTicketModal">
+                                <h5>{{ ticket.title }}</h5>
+                                <p class="user-card mb-0"><i
+                                            class="fas fa-user"></i> {{ ticket.user.firstName }} {{ ticket.user.surname }}
+                                </p>
+                                <form action="{{ path('ticket_delete', {'id': ticket.id}) }}" method="POST"
+                                      id="deleteTicketForm">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ticket.id) }}">
+                                    <button type="submit" class="btn" id="deleteTicketBtn"><i
+                                                class="fa-solid fa-trash"></i></button>
+                                </form>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="createTicketModal" tabindex="-1" aria-labelledby="createTicketModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createTicketModalLabel">Creează Ticket</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_start(form) }}
+                        <div class="mb-3">
+                            {{ form_label(form.title, 'Titlu', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.title, {'attr': {'class': 'form-control', 'required': 'required'}}) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(form.description, 'Descriere', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(form.status, 'Status', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.status, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(form.user, 'User', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.user, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Creează Ticket</button>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="editTicketModal" tabindex="-1" aria-labelledby="editTicketModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editTicketModalLabel">Editare Ticket</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_start(editForm, {'attr': {'id': 'editTicketForm'}}) }}
+                        <input hidden name="ticket[id]" id="ticketIdInput">
+                        <div class="mb-3">
+                            {{ form_label(editForm.title, 'Titlu', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(editForm.title, {'attr': {'class': 'form-control', 'required': 'required'}}) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(editForm.description, 'Descriere', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(editForm.description, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(editForm.status, 'Status', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(editForm.status, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(editForm.user, 'User', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(editForm.user, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Salvează Modificările</button>
+                        {{ form_end(editForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var columns = document.querySelectorAll('.ticket-column');
+
+            columns.forEach(function (column) {
+                new Sortable(column, {
+                    group: 'tickets',
+                    animation: 150,
+                    onEnd: function (evt) {
+                        var ticketId = evt.item.getAttribute('data-id');
+                        var newStatus = column.getAttribute('data-status');
+
+                        fetch(`/ticket/update-status/${ticketId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token('ticket_update') }}'
+                            },
+                            body: JSON.stringify({status: newStatus})
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log('Status updated:', data);
+                            });
+                    }
+                });
+            });
+
+            const ticketCards = document.querySelectorAll('.ticket-card');
+
+
+            ticketCards.forEach(card => {
+                card.addEventListener('click', function () {
+                    const ticketId = card.getAttribute('data-id');
+                    const title = card.getAttribute('data-title');
+                    const description = card.getAttribute('data-description');
+                    const status = card.getAttribute('data-status');
+                    const userId = card.getAttribute('data-user');
+                    const editUrl = `/ticket/${ticketId}/edit`;
+                    const editForm = document.querySelector('#editTicketModal form');
+                    editForm.setAttribute('action', editUrl);
+                    const titleInput = document.querySelector('#editTicketModal input[name="ticket[title]"]');
+                    const descriptionInput = document.querySelector('#editTicketModal textarea[name="ticket[description]"]');
+                    const statusSelect = document.querySelector('#editTicketModal select[name="ticket[status]"]');
+                    const userSelect = document.querySelector('#editTicketModal select[name="ticket[user]"]');
+
+                    titleInput.value = title;
+                    descriptionInput.value = description;
+                    statusSelect.value = status;
+                    userSelect.value = userId;
+
+                    const ticketIdInput = document.querySelector('#ticketIdInput');
+                    if (ticketIdInput) {
+                        ticketIdInput.value = ticketId;
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

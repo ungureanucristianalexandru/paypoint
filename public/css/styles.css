@@ -1,0 +1,40 @@
+body {
+    background-color: #ffffff;
+}
+
+.flex-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+}
+
+.title-category {
+    color: #5e6c84;
+    padding-left: 10px;
+}
+
+.container-category{
+    flex: 1;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #F4F5F7;
+    border-radius: 6px;
+    margin: 10px;
+}
+
+.ticket-card{
+    background-color: #ffffff;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.user-card{
+    text-align: right;
+    font-size: 14px;
+}
+
+.fa-trash{
+    color: red;
+}

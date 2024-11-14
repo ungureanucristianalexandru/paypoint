@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,12 +17,20 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('firstname', TextType::class, [
+                'label' => 'Nume',
+                'attr' => ['placeholder' => 'Introdu numele']
+            ])
+            ->add('surname', TextType::class, [
+                'label' => 'Prenume',
+                'attr' => ['placeholder' => 'Introdu prenumele']
+            ])
             ->add('email', EmailType::class, [
                 'label' => 'Introdu adresa de email'
             ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'first_options'  => [
+                'first_options' => [
                     'label' => 'Introdu parola contului tău',
                     'attr' => ['placeholder' => 'Introdu parola']
                 ],
