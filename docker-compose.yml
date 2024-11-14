@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   app:
     build:
@@ -36,8 +34,10 @@ services:
       MYSQL_DATABASE: symfony_db
       MYSQL_USER: symfony_user
       MYSQL_PASSWORD: symfony_pass
+    ports:
+        - "3306:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - db_data:/var/lib/mysql
     networks:
       - symfony_network
 
@@ -57,4 +57,5 @@ networks:
     driver: bridge
 
 volumes:
-  mysql_data:
+  db_data:
+    driver: local
